@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 import time
 import pickle
 
@@ -35,32 +36,59 @@ class SeleniumInstagram:
         self.driver.refresh()
     
     
-    def modelStartAnalyseFollowers(self):
+    def modelStartAnalyseFollowers(self,followers=True):
+        
+        search = ""
+        if followers:
+            search = FOLLOWERS
+        else:
+            search = FOLLOWING
         
         #Open Followers 
-        elementFollowersToClick = self.driver.find_element(By.XPATH, f"//a[@href='/{USERNANE}/followers/']")
+        elementFollowersToClick = self.driver.find_element(By.XPATH, f"//a[@href='/{USERNANE}{search}']")
         elementFollowersToClick.click()
         actualName = ""
+        
+        frame  = self.driver.find_element(By.XPATH,"//div[@class='xyi19xy x1ccrb07 xtf3nb5 x1pc53ja x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")
+        scroll_origin = ScrollOrigin.from_element(frame)
+        last_y = -1
+        tryAagain = True
 
         lastElementName = ""
         
         while True:
+            
             names = self.driver.find_elements(By.XPATH, "//*[@class='_ap3a _aaco _aacw _aacx _aad7 _aade']")
+            
 
-            for name in names:
-                self.followers.append(name.text)
+           # print(names[-1].rect)
+            #print(names[-1].rect['y'])
+           # print(print(names[-1].text))
 
-            #Get to end            if self.followers[-1] == lastElementName:
+            ActionChains(self.driver)\
+            .scroll_from_origin(scroll_origin,0,int(names[-1].rect['y']))\
+            .perform()
+            
+            
+            if lastElementName != names[-1].text:
+                lastElementName = names[-1].text
+                tryAagain = True
+            else:
+                if tryAagain:
+                    time.sleep(1) 
+                    tryAagain = False       
+                    continue
                 break
 
-            lastElementName = self.followers[-1]
-            
-            
-            ActionChains(self.driver)\
-            .move_to_element(names[-1])\
-            .perform()
+        #Fuera while true
+        names = self.driver.find_elements(By.XPATH, "//*[@class='_ap3a _aaco _aacw _aacx _aad7 _aade']")
 
-            print(self.followers)
+        for name in names:
+            self.followers.append(name.text)
+
+        #print(self.followers)
+       # print(f"Tamagno -> {len(self.followers)}")
+             
         
         
        
