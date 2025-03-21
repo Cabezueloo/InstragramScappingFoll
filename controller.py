@@ -38,8 +38,11 @@ class Controller_Instagram:
         f = open(route,mode='w')
 
         for follow in self.listaFollowing:
+            print(follow)
+            print(f"Me sigue -> {follow in self.listaFollowers}")
             if not follow in self.listaFollowers:
                 f.write(f"El usuario {follow} no te sigue de vuelta\n")
+        f.close()
 
         
 
