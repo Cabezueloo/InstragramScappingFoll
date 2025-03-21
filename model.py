@@ -10,13 +10,16 @@ BASE_URL : str = "https://www.instagram.com/"
 FOLLOWERS : str = "/followers/"
 FOLLOWING : str = "/following/"
 ROUTE_COOKIES = "cookie_login/"
-USERNANE = "maariacbv"
+USERNANE = "iivanpriiv_"
 
 FRAME_FOLLOWERS_FOLLOWING = "'xyi19xy x1ccrb07 xtf3nb5 x1pc53ja x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6'"
 NAME_FOLLOWERS_FOLLOGIN = "'_ap3a _aaco _aacw _aacx _aad7 _aade'"
 
 FRAME_VIWED_HISTORY = "'x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1n2onr6 xw2csxc x1odjw0f x1iyjqo2 x2lwn1j xeuugli xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1'"
 NAME_VIWED_HISTORY = "'x1lliihq x1plvlek xryxfnj x1n2onr6 x1ji0vk5 x18bv5gf x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj'"
+
+SPAN_TOTAL_FOLLOWERS = "'html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs'"
+
 
 class SeleniumInstagram:
 
@@ -45,11 +48,20 @@ class SeleniumInstagram:
     def modelStartAnalyseFollowers(self,followers=True):
         
         search = ""
+        # Locate the element using class name and get the title attribute
+        element = self.driver.find_elements(By.XPATH, "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x1ji0vk5 x18bv5gf x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xl565be xo1l8bm x1roi4f4 x2b8uid x10wh9bi x1wdrske x8viiok x18hxmgj']")[1]  # Adjust class if needed
+
+        totalFollowers = int(element.text.split(" ")[0])
+        print(f"Total followers -> {totalFollowers}")
+
         if followers:
             search = FOLLOWERS
+            f= open("followers/followers.txt","w")
         else:
             search = FOLLOWING
+            f= open(FOLLOWING+"following.txt","w")
         
+
         #Open Followers 
         elementFollowersToClick = self.driver.find_element(By.XPATH, f"//a[@href='/{USERNANE}{search}']")
         elementFollowersToClick.click()
@@ -61,37 +73,28 @@ class SeleniumInstagram:
         elementLoad = self.driver.find_element(By.XPATH, f"//*[@class='x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x14vqqas xod5an3 x1uhb9sk x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x6s0dn4 x1oa3qoh x1nhvcw1']")
         
         lastElementName = ""
-        
-        while True:
-            try:
-                names = self.driver.find_elements(By.XPATH, f"//*[@class={NAME_FOLLOWERS_FOLLOGIN}]")
+        names =  set({})
+
+        while len(names)<totalFollowers:
+            
+            elements = self.driver.find_elements(By.XPATH, f"//*[@class={NAME_FOLLOWERS_FOLLOGIN}]")
                 
-                elementLoad.click()
-                #ActionChains(self.driver)\
-                #.scroll_from_origin(scroll_origin,0,int(names[-1].rect['y']+100))\
-                #.perform()
+            for element in elements:
+                names.add(element.text)
+
+            ActionChains(self.driver)\
+            .scroll_from_origin(scroll_origin,0,int(elements[1].rect['y']))\
+            .perform()
+            print(f"Tamagno -> {len(names)}" )
                 
-                #print(f"lastelementname -> {lastElementName}")
-                #print(f"names -> {names[-1].text}")
-
-
-                if lastElementName != names[-1].text:
-                    lastElementName = names[-1].text
-                    tryAagain = True
-                else:
-                    if tryAagain:
-                        time.sleep(3) 
-                        tryAagain = False       
-                    else:
-                        break
-            except:
-                break
-
+        print("SALIO")
         #Fuera while true
         names = self.driver.find_elements(By.XPATH, f"//*[@class={NAME_FOLLOWERS_FOLLOGIN}]")
 
+        f.write(USERNANE+"\n")
         for name in names:
             self.followers.append(name.text)
+            f.write(f"{name.text}\n")
 
        
              
