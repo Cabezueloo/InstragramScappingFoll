@@ -10,7 +10,7 @@ BASE_URL : str = "https://www.instagram.com/"
 FOLLOWERS : str = "/followers/"
 FOLLOWING : str = "/following/"
 ROUTE_COOKIES = "cookie_login/"
-USERNANE = "iivanpriiv_"
+USERNANE = "recreatiupolinya"
 
 FRAME_FOLLOWERS_FOLLOWING = "'xyi19xy x1ccrb07 xtf3nb5 x1pc53ja x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6'"
 NAME_FOLLOWERS_FOLLOGIN = "'_ap3a _aaco _aacw _aacx _aad7 _aade'"
@@ -49,7 +49,7 @@ class SeleniumInstagram:
         
         search = ""
         # Locate the element using class name and get the title attribute
-        element = self.driver.find_elements(By.XPATH, "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x1ji0vk5 x18bv5gf x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xl565be xo1l8bm x1roi4f4 x2b8uid x10wh9bi x1wdrske x8viiok x18hxmgj']")[1]  # Adjust class if needed
+        element = self.driver.find_elements(By.XPATH, "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x1ji0vk5 x18bv5gf x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xl565be xo1l8bm x1roi4f4 x2b8uid x10wh9bi x1wdrske x8viiok x18hxmgj']")[2]  # Adjust class if needed
 
         totalFollowers = int(element.text.split(" ")[0])
         print(f"Total followers -> {totalFollowers}")
@@ -59,7 +59,7 @@ class SeleniumInstagram:
             f= open("followers/followers.txt","w")
         else:
             search = FOLLOWING
-            f= open(FOLLOWING+"following.txt","w")
+            f= open("following/following.txt","w")
         
 
         #Open Followers 
@@ -68,12 +68,8 @@ class SeleniumInstagram:
         
         frame  = self.driver.find_element(By.XPATH,f"//div[@class={FRAME_FOLLOWERS_FOLLOWING}]")
         scroll_origin = ScrollOrigin.from_element(frame)
-        tryAagain = True
-        
-        elementLoad = self.driver.find_element(By.XPATH, f"//*[@class='x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x14vqqas xod5an3 x1uhb9sk x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x6s0dn4 x1oa3qoh x1nhvcw1']")
-        
-        lastElementName = ""
         names =  set({})
+        salto = 75
 
         while len(names)<totalFollowers:
             
@@ -81,20 +77,30 @@ class SeleniumInstagram:
                 
             for element in elements:
                 names.add(element.text)
-
+      
+            if len(names)>150:
+                salto = 125
+            if len(names)>200:
+                salto = 175
+            elif (len(names)>300):
+                salto = 220
+            elif (len(names)>400):
+                salto = 275
+            elif (len(names)>500):
+                salto = 350 
             ActionChains(self.driver)\
-            .scroll_from_origin(scroll_origin,0,int(elements[1].rect['y']))\
+            .scroll_from_origin(scroll_origin,0,int(salto))\
             .perform()
+            
             print(f"Tamagno -> {len(names)}" )
                 
         print("SALIO")
         #Fuera while true
-        names = self.driver.find_elements(By.XPATH, f"//*[@class={NAME_FOLLOWERS_FOLLOGIN}]")
 
         f.write(USERNANE+"\n")
         for name in names:
-            self.followers.append(name.text)
-            f.write(f"{name.text}\n")
+            self.followers.append(name)
+            f.write(f"{name}\n")
 
        
              

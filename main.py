@@ -16,7 +16,7 @@ controller = Controller_Instagram(seleniumInstagram=model_one,view=view)
 def on_press(key):
     if key== Key.ctrl:
         
-        hilo_followers = threading.Thread(target=model_one.modelStartAnalyseFollowers,args=(True,))
+        hilo_followers = threading.Thread(target=model_one.modelStartAnalyseFollowers,args=(False,))
         #//hilo_following = threading.Thread(target=model_two.modelStartAnalyseFollowers,args=(False,))
  #       hilo_views = threading.Thread(target=model_three.seeVisitedHistory)
         
@@ -31,13 +31,6 @@ def on_press(key):
         
         print(f"Tiempo en coger todas las estadísticas {time.time() - t} ")
 
-        controller.listaFollowers = model_one.followers
-        #controller.listaFollowing = model_two.followers
-    #    controller.listaViews = model_three.views
-
-        controller.show_stats()
-     #   controller.users_saw_history_and_not_follow_your_account()
-        controller.users_not_follow_back()
         print("fIN")
 
         
