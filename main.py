@@ -5,30 +5,25 @@ import time
 import threading
 from pynput.keyboard import Key, Controller,Listener
 
-model_one = SeleniumInstagram()
-#model_two = SeleniumInstagram()
-#model_three = SeleniumInstagram()
+model = SeleniumInstagram()
+
 view = View()
 
 
-controller = Controller_Instagram(seleniumInstagram=model_one,view=view)
+controller = Controller_Instagram(seleniumInstagram=model,view=view)
 
 def on_press(key):
+
     if key== Key.ctrl:
         
-        hilo_followers = threading.Thread(target=model_one.modelStartAnalyseFollowers,args=(False,))
-        #//hilo_following = threading.Thread(target=model_two.modelStartAnalyseFollowers,args=(False,))
- #       hilo_views = threading.Thread(target=model_three.seeVisitedHistory)
-        
+        hilo = threading.Thread(target=model.modelStart,args=(False,True))
+    
         t = time.time()
-        #hilo_following.start()
-        hilo_followers.start()
-  #      hilo_views.start()
-       
-        #hilo_following.join()
-        hilo_followers.join()
-   #     hilo_views.join()
-        
+    
+        hilo.start()
+ 
+        hilo.join()
+   
         print(f"Tiempo en coger todas las estadísticas {time.time() - t} ")
 
         print("fIN")
