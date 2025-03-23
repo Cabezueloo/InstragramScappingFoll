@@ -16,7 +16,7 @@ def on_press(key):
 
     if key== Key.ctrl:
         
-        hilo = threading.Thread(target=model.modelStart,args=(False,True))
+        hilo = threading.Thread(target=model.modelStart,args=(True,True))
     
         t = time.time()
     

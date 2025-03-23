@@ -35,7 +35,7 @@ class SeleniumInstagram:
         self.url = BASE_URL+self.account+"/"
         self.followers = list()
         self.views      = set(())
-        self.driver.implicitly_wait(3.0) # Wait 3 seconds into get a element
+        self.driver.implicitly_wait(4.0) # Wait 3 seconds into get a element
         self.login()
 
     def login(self):
@@ -101,7 +101,7 @@ class SeleniumInstagram:
             .scroll_from_origin(scroll_origin,0,int(salto))\
             .perform()
             
-            salto+=3
+            salto+=4
             print(f"Tamagno -> {len(names)}" )
             print(f"Salto -> {salto}" )
                 
@@ -140,11 +140,6 @@ class SeleniumInstagram:
                 print(f"Dejo de seguir -> {resto}")
 
 
-
-
-            
-
-        
 
        
              
