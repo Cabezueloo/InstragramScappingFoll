@@ -4,6 +4,7 @@ from controller import Controller_Instagram
 import time
 import threading
 from pynput.keyboard import Key, Controller,Listener
+import os
 
 model = SeleniumInstagram()
 
@@ -16,7 +17,13 @@ def on_press(key):
 
     if key== Key.ctrl:
         
-        hilo = threading.Thread(target=model.modelStart,args=(True,True))
+        #Create folders
+        if not (os.path.isdir('following')):
+            os.makedirs('following')
+        if not (os.path.isdir('followers')):
+            os.makedirs('followers')
+
+        hilo = threading.Thread(target=model.modelStart,args=(False,False))
     
         t = time.time()
     
