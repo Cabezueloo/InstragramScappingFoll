@@ -12,7 +12,7 @@ class Controller_Instagram:
         self.listaFollowing = []
         self.listaViews = []
     
-    def controllerStartAnalyse(self) : self.seleniumInstragramController.modelStartAnalyse()
+    #def controllerStartAnalyse(self) : self.seleniumInstragramController.modelStartAnalyse()
 
     def show_stats(self):
         
