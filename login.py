@@ -3,21 +3,21 @@ import pickle
 from pynput.keyboard import Key, Controller,Listener
 
 driver = webdriver.Chrome()
-
+from constants import ROUTE_FILE_OUR_COOKIES,BASE_URL
 #navigate to the url
 
-ROUTE_COOKIES = "cookie_login/"
-driver.get("https://www.instagram.com/")
 
-def showCookie():
+driver.get(BASE_URL)
+
+def save_our_cookies():
         
     #create a variable to hold our cookies
     cookies = driver.get_cookies()
 
     #print the cookies list
-    n = 9
+    n = 1
     for cookie in cookies:
-        pickle.dump(cookie,open(f"{ROUTE_COOKIES}cookie{n}.pkl", "wb"))
+        pickle.dump(cookie,open(f"{ROUTE_FILE_OUR_COOKIES}cookie{n}.pkl", "wb"))
         print(f"Saved {n}")
         n+=1
         
@@ -28,8 +28,8 @@ def showCookie():
 def tryEntre():
     
     for x in range(1,9):
-        print(f"{ROUTE_COOKIES}cookie{x}.pkl")
-        cookies = pickle.load(open(f"{ROUTE_COOKIES}cookie{x}.pkl","rb"))
+        print(f"{ROUTE_FILE_OUR_COOKIES}cookie{x}.pkl")
+        cookies = pickle.load(open(f"{ROUTE_FILE_OUR_COOKIES}cookie{x}.pkl","rb"))
         
         
         driver.add_cookie(cookies)
@@ -40,7 +40,7 @@ def tryEntre():
 
 def on_press(key):
     if key== Key.ctrl:
-        showCookie()
+        save_our_cookies()
     if key== Key.alt:
         tryEntre()
 
