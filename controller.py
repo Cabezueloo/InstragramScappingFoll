@@ -1,24 +1,18 @@
 from model import SeleniumInstagram
-from view import View
+
 
 STATS : str = 'stats/'
 
 class Controller_Instagram:
 
-    def __init__(self, seleniumInstagram:SeleniumInstagram,view:View):
+    def __init__(self, seleniumInstagram:SeleniumInstagram):
         self.seleniumInstragramController = seleniumInstagram
-        self.viewController = view
+        
         self.listaFollowers = []
         self.listaFollowing = []
         self.listaViews = []
     
     #def controllerStartAnalyse(self) : self.seleniumInstragramController.modelStartAnalyse()
-
-    def show_stats(self):
-        
-        print(f"Tamagno followers -> {len(self.listaFollowers)}")
-        print(f"Tamagno following -> {len(self.listaFollowing)}")
-        print(f"Tamagno views -> {len(self.listaViews)}")
 
     def users_saw_history_and_not_follow_your_account(self):
         

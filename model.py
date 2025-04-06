@@ -6,9 +6,7 @@ from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 import time
 import pickle
 from constants import *
-
-
-
+import os
 
 class SeleniumInstagram:
 
@@ -122,14 +120,20 @@ class SeleniumInstagram:
             for resto in oldest_foll:
                 print(f"Dejo de seguir -> {resto}")
 
-
-
-       
-             
+     
+    """
+    Check who view your history and not is follower about your account.
+    
+    """
     def seeVisitedHistory(self):
         
         
-        self.driver.get("https://www.instagram.com/stories/archive/18299908186225234/?initial_media_id=3572457676619689748")
+        #Check if exist the followers list
+        if not (os.path.exists(ROUTE_FILE_FOLLOWERS_OLDER)):
+            self.modelStart(True,True)
+        
+        #URL of the stories archive that could scan
+        self.driver.get()
 
         element = self.driver.find_element(By.XPATH, "//span[@class='xfungia x1yxbuor x19qstwj x1yrs1ss']")
         element.click()
@@ -174,3 +178,40 @@ class SeleniumInstagram:
 
         for name in names:
             self.views.add(name.text)
+
+            
+        lista_file_old = []
+        
+        with open(ROUTE_FILE_FOLLOWERS_OLDER) as file:
+            for line in file:
+                lista_file_old.append(line.replace("\n",""))
+
+        file = open("non_followers_view.txt",'w')
+        
+        for view in self.views:
+            if not view in lista_file_old:
+                file.write(f"No té sigue -> {view}\n")
+                print(f"No té sigue -> {view}")
+                
+    def checkNotFollowBack(self):
+        
+       # self.modelStart(True,True)
+        #self.modelStart(False,True)
+        
+        followers = []
+        
+        with open(ROUTE_FILE_FOLLOWERS_OLDER) as file:
+            for line in file:
+                followers.append(line.replace("\n",""))
+
+        followings = []
+        
+        with open(ROUTE_FILE_FOLLOWING_OLDER) as file:
+            for line in file:
+                followings.append(line.replace("\n",""))
+                
+        
+        for user_following in followings:
+            if not user_following in followers:
+                print(user_following)
+
